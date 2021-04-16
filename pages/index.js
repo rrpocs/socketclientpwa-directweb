@@ -4,7 +4,7 @@ import userGen from "username-generator"
 import { Button, Input } from 'reactstrap';
 
 //const ENDPOINT = "http://127.0.0.1:3333";
-const ENDPOINT = "http://157.230.52.134:3333";
+const ENDPOINT = "https://push01.cloudrobot.com.br:3333/";
 const socket = socketIOClient(ENDPOINT);
 
 function App() {

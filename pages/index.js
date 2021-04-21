@@ -20,18 +20,32 @@ function App() {
 
   useEffect(() => {
     // subscribe a new user
-    socket.emit("login", 'usuário-' + userGen.generateUsername());
+    socket.emit("login", 'usuário-' + userGen.generateUsername())
     // list of connected users
     socket.on("users", data => {
       setUser({ usersList: JSON.parse(data) })
-    });
+    })
     // we get the messages
     socket.on("getMsg", data => {
-      let listMessages = recMsg.listMsg;
-      listMessages.push(JSON.parse(data));
-      setRecMsg({ listMsg: listMessages });
-    });
-  }, []);
+      let listMessages = recMsg.listMsg
+      listMessages.push(JSON.parse(data))
+      setRecMsg({ listMsg: listMessages })
+      playSound()
+    })
+  }, [])
+
+  useEffect(() => {
+    // if ("serviceWorker" in navigator) {
+    //   navigator.serviceWorker
+    //     .register('/service-worker.js')
+    //     .then(registration => {
+    //       console.log('service worker registration successful', registration)
+    //     })
+    //     .catch(err => {
+    //       console.log('service worker registration failed', err.message)
+    //     })
+    // }
+  }, [])
 
   // to send a message
   const sendMessage = () => {
@@ -90,14 +104,8 @@ function App() {
       </div>
       <div className="d-flex justify-content-center">
         <Input style={{ width: "300px", display: "inline" }} id="inputmsg" onChange={(event) => setMsg(event.target.value)} />
-        <Button className="btn btn-info" id="btnmsg" onClick={() => { sendMessage(); playSound(); }}> Enviar </Button>
+        <Button className="btn btn-info" id="btnmsg" onClick={() => { sendMessage(); }}> Enviar </Button>
       </div>
-      <script type="javascript">
-        import 'https://cdn.jsdelivr.net/npm/@pwabuilder/pwaupdate';
-
-        const el = document.createElement('pwa-update');
-        document.body.appendChild(el);
-      </script>
     </div >
   );
 }

@@ -3,7 +3,7 @@ import socketIOClient from "socket.io-client";
 import userGen from "username-generator"
 import { Button, Input } from 'reactstrap';
 
-//const ENDPOINT = "http://127.0.0.1:3333";
+// const ENDPOINT = "http://127.0.0.1:3333";
 const ENDPOINT = "https://push01.cloudrobot.com.br:3333/";
 const socket = socketIOClient(ENDPOINT);
 
@@ -92,6 +92,12 @@ function App() {
         <Input style={{ width: "300px", display: "inline" }} id="inputmsg" onChange={(event) => setMsg(event.target.value)} />
         <Button className="btn btn-info" id="btnmsg" onClick={() => { sendMessage(); playSound(); }}> Enviar </Button>
       </div>
+      <script type="javascript">
+        import 'https://cdn.jsdelivr.net/npm/@pwabuilder/pwaupdate';
+
+        const el = document.createElement('pwa-update');
+        document.body.appendChild(el);
+      </script>
     </div >
   );
 }

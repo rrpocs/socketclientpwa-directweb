@@ -1,7 +1,7 @@
 {
   "dir": "ltr",
   "lang": "id",
-  "name": "socketclientpwa-directweb",
+  "name": "socketclientpwa-directweb-v1.1.2",
   "short_name": "scpwa-dweb",
   "scope": "/",
   "display": "browser",

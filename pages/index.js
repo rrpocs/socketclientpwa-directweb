@@ -34,19 +34,6 @@ function App() {
     })
   }, [])
 
-  useEffect(() => {
-    // if ("serviceWorker" in navigator) {
-    //   navigator.serviceWorker
-    //     .register('/service-worker.js')
-    //     .then(registration => {
-    //       console.log('service worker registration successful', registration)
-    //     })
-    //     .catch(err => {
-    //       console.log('service worker registration failed', err.message)
-    //     })
-    // }
-  }, [])
-
   // to send a message
   const sendMessage = () => {
     socket.emit("sendMsg", JSON.stringify({ id: loggedUser.id, msg: msg }));
@@ -99,11 +86,11 @@ function App() {
       </table>
       <h3 className="d-flex justify-content-center"> User : {loggedUser?.userName} </h3>
       <div style={{ borderStyle: "inset" }}>
-        <h2 className="d-flex justify-content-center"> MENSAGEM </h2>
         {recMsg.listMsg?.map((msgInfo, index) => { return (<div className="d-flex justify-content-center" key={index}> <b>{msgInfo.userName} </b> :  {msgInfo.msg} <small style={{ marginLeft: "18px", color: "blue", marginTop: "5px" }}> {msgInfo.time} </small> </div>) })}
       </div>
       <div className="d-flex justify-content-center">
-        <Input style={{ width: "300px", display: "inline" }} id="inputmsg" onChange={(event) => setMsg(event.target.value)} />
+        <h4 className="d-flex justify-content-center"> MENSAGEM </h4>
+        <Input style={{ width: "300px", display: "inline", marginLeft: "10px" }} id="inputmsg" onChange={(event) => setMsg(event.target.value)} />
         <Button className="btn btn-info" id="btnmsg" onClick={() => { sendMessage(); }}> Enviar </Button>
       </div>
     </div >

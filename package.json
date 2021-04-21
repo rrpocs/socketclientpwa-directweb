@@ -5,9 +5,7 @@
   "scripts": {
     "build": "next build",
     "dev": "next dev -p 3000",
-    "start": "next start",
-    "xdev": "node server.js",
-    "xstart": "node server.js"
+    "start": "next start"
   },
   "dependencies": {
     "babel-plugin-module-resolver": "^4.0.0",
@@ -21,7 +19,6 @@
     "reactstrap": "^8.4.1",
     "sass": "^1.26.5",
     "socket.io-client": "^2.3.0",
-    "sw-precache-webpack-plugin": "^1.0.0",
     "username-generator": "^1.1.0"
   }
 }

@@ -3,7 +3,6 @@ import { useState, useEffect } from "react";
 import socketIOClient from "socket.io-client";
 import userGen from "username-generator"
 
-// const ENDPOINT = "http://127.0.0.1:3333";
 const ENDPOINT = "https://push01.cloudrobot.com.br:3333/";
 const socket = socketIOClient(ENDPOINT);
 
@@ -17,10 +16,8 @@ export default function Home({ data }) {
 
 
   useEffect(() => {
-    console.log('data')
     // subscribe a new user
     socket.emit("login", userGen.generateUsername())
-    console.log(userGen.generateUsername())
 
     // list of connected users
     socket.on("users", data => {
@@ -67,7 +64,6 @@ export default function Home({ data }) {
       <Head>
         <title>All Peoples</title>
         <link rel="icon" href="/favicon.ico" />
-        <link rel='manifest' href='/manifest.json'></link>
       </Head>
 
       <div style={{ padding: '10px', fontSize: 'smaller' }}>
@@ -87,7 +83,7 @@ export default function Home({ data }) {
               return (
                 <div key={user.id}>
                   -  {user.userName}:
-                  <span style={{ paddingLeft: '2px' }}>{user.connectionTime}</span>
+                  {/* <span style={{ paddingLeft: '2px' }}>{user.connectionTime}</span> */}
                 </div>
               )
             })
@@ -125,22 +121,6 @@ export default function Home({ data }) {
 
       </div>
 
-      <script type='javascript'>
-        // This is the "Offline page" service worker
-
-      // Add this below content to your HTML page inside a <script type="module"></script> tag, or add the js file to your page at the very top to register service worker
-      // If you get an error about not being able to import, double check that you have type="module" on your <script /> tag
-
-      /*
-        This code uses the pwa-update web component https://github.com/pwa-builder/pwa-update to register your service worker,
-        tell the user when there is an update available and let the user know when your PWA is ready to use offline.
-      */
-
-      import 'https://cdn.jsdelivr.net/npm/@pwabuilder/pwaupdate';
-
-      const el = document.createElement('pwa-update');
-      document.body.appendChild(el);
-      </script>
     </>
   );
 }

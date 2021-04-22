@@ -1,30 +1,32 @@
-import React, { useState, useEffect } from "react";
+import Head from "next/head";
+import { useState, useEffect } from "react";
 import socketIOClient from "socket.io-client";
 import userGen from "username-generator"
-import { Button, Input } from 'reactstrap';
 
 // const ENDPOINT = "http://127.0.0.1:3333";
 const ENDPOINT = "https://push01.cloudrobot.com.br:3333/";
 const socket = socketIOClient(ENDPOINT);
 
-function App() {
 
-  const [user, setUser] = useState({
-    usersList: null
-  });
+export default function Home({ data }) {
+
+  const [user, setUser] = useState({ usersList: null });
   const [msg, setMsg] = useState("");
-  const [recMsg, setRecMsg] = useState({
-    listMsg: []
-  });
+  const [recMsg, setRecMsg] = useState({ listMsg: [] });
   const [loggedUser, setLoggedUser] = useState();
 
+
   useEffect(() => {
+    console.log('data')
     // subscribe a new user
-    socket.emit("login", 'usuário-' + userGen.generateUsername())
+    socket.emit("login", userGen.generateUsername())
+    console.log(userGen.generateUsername())
+
     // list of connected users
     socket.on("users", data => {
       setUser({ usersList: JSON.parse(data) })
     })
+
     // we get the messages
     socket.on("getMsg", data => {
       let listMessages = recMsg.listMsg
@@ -34,16 +36,17 @@ function App() {
     })
   }, [])
 
-  // to send a message
+
   const sendMessage = () => {
     socket.emit("sendMsg", JSON.stringify({ id: loggedUser.id, msg: msg }));
   }
-  // get the logged user
+
+
   socket.on("connecteduser", data => {
     setLoggedUser(JSON.parse(data));
   });
 
-  // to play a sond
+
   const playSound = () => {
     let context = new AudioContext(),
       oscillator = context.createOscillator(),
@@ -56,44 +59,71 @@ function App() {
     contextGain.gain.exponentialRampToValueAtTime(
       0.00001, context.currentTime + 3
     )
-
-    // let context = new AudioContext(),
-    //   oscillator = context.createOscillator();
-
-    // oscillator.type = 'sine';
-    // oscillator.connect(context.destination);
-    // oscillator.start();
   }
 
+
   return (
-    <div style={{ padding: '20px' }}>
-      <h3 className="d-flex justify-content-center"> Usuários conectados : {user.usersList?.length} </h3>
-      <table className="table">
-        <thead>
-          <tr>
-            <th> Usuário </th>
-            <th> Conexão </th>
-          </tr>
-        </thead>
-        <tbody>
-          {user.usersList?.map(user => {
-            return (<tr key={user.id}>
-              <td> {user.userName} </td>
-              <td> {user.connectionTime} </td>
-            </tr>)
-          })}
-        </tbody>
-      </table>
-      <h3 className="d-flex justify-content-center"> User : {loggedUser?.userName} </h3>
-      <div style={{ borderStyle: "inset" }}>
-        {recMsg.listMsg?.map((msgInfo, index) => { return (<div className="d-flex justify-content-center" key={index}> <b>{msgInfo.userName} </b> :  {msgInfo.msg} <small style={{ marginLeft: "18px", color: "blue", marginTop: "5px" }}> {msgInfo.time} </small> </div>) })}
+    <>
+      <Head>
+        <title>All Peoples</title>
+        <link rel="icon" href="/favicon.ico" />
+      </Head>
+
+      <div style={{ padding: '10px', fontSize: 'smaller' }}>
+
+        <div style={{ padding: '0px' }}>
+          conexões:
+          <span style={{ paddingLeft: '0px' }}> {user.usersList?.length}</span>
+        </div>
+        <br />
+
+        <div style={{ padding: '0px' }}>
+          usuários conectados
+        </div>
+        <div style={{ padding: '0px' }}>
+          {
+            user.usersList?.map(user => {
+              return (
+                <div key={user.id}>
+                  -  {user.userName}:
+                  <span style={{ paddingLeft: '2px' }}>{user.connectionTime}</span>
+                </div>
+              )
+            })
+          }
+        </div>
+        <br />
+
+        <div style={{ padding: '0px' }}>
+          mensagens trocadas
+        </div>
+        <div style={{ padding: '0px' }}>
+          {
+            recMsg.listMsg?.map((msgInfo, index) => {
+              return (
+                <div key={index}>
+                  -  {msgInfo.userName}:
+                  <span style={{ paddingLeft: '2px' }}>{msgInfo.msg}</span>
+                  <span style={{ paddingLeft: '2px' }}>{msgInfo.time}</span>
+                </div>
+              )
+            })
+          }
+        </div>
+        <br />
+        <br />
+        <br />
+
+        <div>
+          <span style={{ paddingLeft: '0px' }}>
+            mensagem:
+            <input type="text" style={{ marginLeft: '5px' }} />
+            <input type="button" style={{ marginLeft: '5px' }}
+              value="enviar" onClick={() => { sendMessage(); }} />
+          </span>
+        </div>
+
       </div>
-      <div className="d-flex justify-content-center">
-        <h4 className="d-flex justify-content-center"> MENSAGEM </h4>
-        <Input style={{ width: "300px", display: "inline", marginLeft: "10px" }} id="inputmsg" onChange={(event) => setMsg(event.target.value)} />
-        <Button className="btn btn-info" id="btnmsg" onClick={() => { sendMessage(); }}> Enviar </Button>
-      </div>
-    </div >
+    </>
   );
 }
-export default App;

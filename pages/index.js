@@ -36,7 +36,7 @@ export default function Home({ data }) {
 
   useEffect(() => {
     if (user && user.usersList?.length > 0) {
-      sendMessage()
+      socket.emit("sendMsg", JSON.stringify({ id: loggedUser.id, msg: `${loggedUser.userName} conectado` }))
     }
   }, [user.usersList?.length])
 
@@ -120,9 +120,20 @@ export default function Home({ data }) {
 
         <div>
           <span>
-            <input type="text" style={{ marginLeft: '0px' }} />
-            <input type="button" style={{ marginLeft: '5px' }}
-              value="enviar" onClick={() => { sendMessage() }} />
+
+            <input
+              type="text"
+              style={{ marginLeft: '0px' }}
+              id="inputmsg"
+              onChange={(event) => setMsg(event.target.value)}
+            />
+
+            <input
+              type="button"
+              style={{ marginLeft: '5px' }}
+              value="enviar" onClick={() => { sendMessage() }}
+            />
+
           </span>
         </div>
 

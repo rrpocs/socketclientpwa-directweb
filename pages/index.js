@@ -1,4 +1,3 @@
-import Head from "next/head";
 import { useState, useEffect } from "react";
 import socketIOClient from "socket.io-client";
 import userGen from "username-generator"
@@ -72,11 +71,6 @@ export default function Home({ data }) {
 
   return (
     <>
-      <Head>
-        <title>All Peoples</title>
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
-
       <div style={{ padding: '10px', fontSize: 'smaller' }}>
 
         <div>

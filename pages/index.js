@@ -36,7 +36,11 @@ export default function Home({ data }) {
 
   useEffect(() => {
     if (user && user.usersList?.length > 0) {
-      socket.emit("sendMsg", JSON.stringify({ id: loggedUser.id, msg: `${loggedUser.userName} conectado` }))
+      recMsg.listMsg?.map((msgInfo) => {
+        socket.emit("sendMsg", JSON.stringify({
+          id: loggedUser.id, msg: `${msgInfo.userName} conectado`
+        }))
+      })
     }
   }, [user.usersList?.length])
 

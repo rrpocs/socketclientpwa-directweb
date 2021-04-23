@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "next": "9.3.6",
+    "next-pwa": "^5.2.14",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "socket.io-client": "^2.3.0",

@@ -16,8 +16,9 @@ export default function Home({ data }) {
 
 
   useEffect(() => {
+    const _user = userGen.generateUsername()
     // subscribe a new user
-    socket.emit("login", userGen.generateUsername())
+    socket.emit("login", _user)
 
     // list of connected users
     socket.on("users", data => {
@@ -29,22 +30,28 @@ export default function Home({ data }) {
       let listMessages = recMsg.listMsg
       listMessages.push(JSON.parse(data))
       setRecMsg({ listMsg: listMessages })
-      playSound()
+      playSound(1)
     })
   }, [])
 
+  useEffect(() => {
+    if (user && user.usersList?.length > 0) {
+      sendMessage()
+    }
+  }, [user.usersList?.length])
+
 
   const sendMessage = () => {
-    socket.emit("sendMsg", JSON.stringify({ id: loggedUser.id, msg: msg }));
+    socket.emit("sendMsg", JSON.stringify({ id: loggedUser.id, msg: msg }))
   }
 
 
   socket.on("connecteduser", data => {
-    setLoggedUser(JSON.parse(data));
+    setLoggedUser(JSON.parse(data))
   });
 
 
-  const playSound = () => {
+  const playSound = (times) => {
     let context = new AudioContext(),
       oscillator = context.createOscillator(),
       contextGain = context.createGain();
@@ -54,7 +61,7 @@ export default function Home({ data }) {
     oscillator.start(0);
 
     contextGain.gain.exponentialRampToValueAtTime(
-      0.00001, context.currentTime + 3
+      0.00001, context.currentTime + times
     )
   }
 
@@ -68,7 +75,7 @@ export default function Home({ data }) {
 
       <div style={{ padding: '10px', fontSize: 'smaller' }}>
 
-        <div style={{ padding: '0px' }}>
+        <div>
           conexões:
           <span style={{ paddingLeft: '0px' }}> {user.usersList?.length}</span>
         </div>
@@ -91,17 +98,17 @@ export default function Home({ data }) {
         </div>
         <br />
 
-        <div style={{ padding: '0px' }}>
+        <div>
           mensagens trocadas
         </div>
-        <div style={{ padding: '0px' }}>
+        <div>
           {
             recMsg.listMsg?.map((msgInfo, index) => {
               return (
                 <div key={index}>
                   -  {msgInfo.userName}:
-                  <span style={{ paddingLeft: '2px' }}>{msgInfo.msg}</span>
-                  <span style={{ paddingLeft: '2px' }}>{msgInfo.time}</span>
+                  <span style={{ paddingLeft: '2px', fontSize: 'smaller' }}>{msgInfo.msg}</span>
+                  <span style={{ paddingLeft: '2px', fontSize: 'smaller' }}>{msgInfo.time}</span>
                 </div>
               )
             })
@@ -112,10 +119,10 @@ export default function Home({ data }) {
         <br />
 
         <div>
-          <span style={{ paddingLeft: '0px' }}>
+          <span>
             <input type="text" style={{ marginLeft: '0px' }} />
             <input type="button" style={{ marginLeft: '5px' }}
-              value="enviar" onClick={() => { sendMessage(); }} />
+              value="enviar" onClick={() => { sendMessage() }} />
           </span>
         </div>
 

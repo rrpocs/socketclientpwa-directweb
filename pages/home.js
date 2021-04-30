@@ -10,12 +10,14 @@ const socket = socketIOClient(ENDPOINT);
 export default function Home({ query }) {
 
   const router = useRouter()
-  const { userLogged } = router.query
+  const { username } = router.query
+  const [userLogged, setUserLogged] = useState()
   const [loggedUser, setLoggedUser] = useState()
   const [user, setUser] = useState({ usersList: null })
 
   useEffect(() => {
-    socket.emit("login", userLogged)
+    socket.emit("login", username)
+    setUserLogged(username)
     socket.on("users", data => {
       setUser({ usersList: JSON.parse(data) })
     })
@@ -25,6 +27,7 @@ export default function Home({ query }) {
   }, [])
 
   socket.on("connecteduser", data => {
+    console.log(data)
     setLoggedUser(JSON.parse(data))
   });
 
@@ -36,11 +39,9 @@ export default function Home({ query }) {
     let context = new AudioContext(),
       oscillator = context.createOscillator(),
       contextGain = context.createGain();
-
     oscillator.connect(contextGain);
     contextGain.connect(context.destination);
     oscillator.start(0);
-
     contextGain.gain.exponentialRampToValueAtTime(
       0.00001, context.currentTime + times
     )
@@ -49,15 +50,31 @@ export default function Home({ query }) {
   return (
     <div style={{ padding: '10px', fontSize: 'smaller' }}>
       <div>
-        conexões:
-          <span style={{ paddingLeft: '0px' }}> {user.usersList?.length}</span>
-      </div>
-      <br />
+        conexões: {' '} {user.usersList?.length}
+      </div><br />
+      <div>
+        usuário: {' '} {userLogged}
+      </div><br />
       <div>
         <input
           type="button"
           value="notificar" onClick={() => { sendMessage('NOTE') }}
         />
+      </div><br /><br />
+      <div style={{ padding: '0px' }}>
+        usuários conectados
+      </div>
+      <div id="divUsr" style={{ padding: '0px' }}>
+        {
+          user.usersList?.filter(p => p.id !== null)
+            .map(user => {
+              return (
+                <div key={user.id}>
+                  -  {user.id}
+                </div>
+              )
+            })
+        }
       </div>
     </div>
   );

@@ -2,7 +2,8 @@ import { useState, useEffect } from "react";
 import socketIOClient from "socket.io-client";
 import userGen from "username-generator"
 
-const ENDPOINT = "https://push01.cloudrobot.com.br:3333/";
+//const ENDPOINT = "https://push01.cloudrobot.com.br:3333/";
+const ENDPOINT = "https://localhost:3333/";
 const socket = socketIOClient(ENDPOINT);
 
 
